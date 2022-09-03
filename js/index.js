@@ -70,14 +70,14 @@ const displayNews = news => {
             <div class="container-fluid card mb-3 card-portion" style=" width: 1080px;
             height: 350px;">
                 <div class="row g-0">
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-12 col-sm-6 ">
                         <img src="${singleNews.image_url}" class="img-fluid mt-3 ms-1" style="width: 350px;
                         height: 300px;" alt="...">
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-8 col-12 col-sm-6">
                         <div onclick="loadNewsDetails('${singleNews._id}')"  class="card-body" data-bs-toggle="modal" data-bs-target="#newsDetailModal">
-                            <h5 class="card-title pt-4">${singleNews.title}</h5>
-                            <p class="card-text">${singleNews.details}<span>...</span></p>
+                            <h5 class="card-title pt-4">${singleNews.title} ? singleNews.title : 'no title found'}"</h5>
+                            <p class="card-text">${singleNews.details}? singleNews.details : 'no details found'}"<span>...</span></p>
                             <div id="show-all" class="text-center d-none">
                 <div id="btn-show-all" class="btn btn-primary">Show all</div> </div>
 
