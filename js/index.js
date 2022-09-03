@@ -21,13 +21,16 @@ displayCategory = news => {
             <button  onclick="loadNews('${news[5].category_id}')" class="col border border-0 bg-transparent">${news[5].category_name}</button>
             <button  onclick="loadNews('${news[6].category_id}')" class="col border border-0 bg-transparent">${news[6].category_name}</button>
             <button  onclick="loadNews('${news[7].category_id}')" class="col border border-0 bg-transparent">${news[7].category_name}</button>
-        `
+        `;
     categoryContainer.appendChild(categoryDiv);
+    //start the spinner
+
+    toggleSpinner(true);
 }
 loadCategory();
 
-const loadNews = async (id) => {
-    const url = `https://openapi.programming-hero.com/api/news/category/${id}`
+const loadNews = async (category_id) => {
+    const url = `https://openapi.programming-hero.com/api/news/category/${category_id}`
     const res = await fetch(url)
     const data = await res.json()
     displayNews(data.data);
@@ -35,6 +38,7 @@ const loadNews = async (id) => {
 
 const displayNews = news => {
     // console.log(news);
+
     const newsContainer = document.getElementById('news-container');
     newsContainer.innerHTML = ` `;
 
@@ -49,15 +53,16 @@ const displayNews = news => {
 
     //display all news
     news.forEach(singleNews => {
-        console.log(singleNews);
+
         const newsDiv = document.createElement('div');
         newsDiv.innerHTML = `
             <div class="d-flex justify-content-center align-items-center pt-2 mb-2">
-            <div class="card mb-3 card-portion" style=" width: 1080px;
+            <div class="container-fluid card mb-3 card-portion" style=" width: 1080px;
             height: 350px;">
                 <div class="row g-0 ">
                     <div class="col-md-4">
-                        <img src="${singleNews.image_url}" class="img-fluid rounded-start" alt="...">
+                        <img src="${singleNews.image_url}" class="img-fluid mt-3 ms-3" style="width: 350px;
+                        height: 300px;" alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
@@ -67,10 +72,15 @@ const displayNews = news => {
                 <div id="btn-show-all" class="btn btn-primary">Show all</div> </div>
 
                             <div class="row mt-5">
-                                <div class="col">${singleNews.author.name}</div>
-                                <div class="col"><i class="fa-regular fa-eye"></i></div>
-                                <!-- <div class="col">Home</div> -->
-                                <div class="col"><i class="fa-solid fa-arrow-right"></i></div>
+                           <div class="col d-flex d-grid gap-3"><div><img style="width:40px;height:40px; border-radius: 155px;" src="${singleNews.author.img ? singleNews.author.img : 'none'}"></div>
+                                <div>${singleNews.author.name ? singleNews.author.name : 'author name not found'}</div></div>
+
+                                <div class="col d-flex d-grid gap-2"><div><i class="fa-regular fa-eye"></i></div>
+                                <p>${singleNews.total_view ? singleNews.total_view : 'view number not found'}</p>
+                                </div>
+
+                                <div class="col"><i onclick="loadNewsDetails('${singleNews._id}')" class="fa-solid fa-arrow-right" data-bs-toggle="modal" data-bs-target="#newsDetailModal"></i></div>
+                                
                             </div>
                         </div>
 
@@ -79,10 +89,50 @@ const displayNews = news => {
 
             </div>
         </div>
-            `
+            `;
         newsContainer.appendChild(newsDiv);
     })
+    //stop the spinner
+    toggleSpinner(false);
+
 }
+loadNews('01');
+
+//show news details
+const loadNewsDetails = async (news_id) => {
+    const url = `https://openapi.programming-hero.com/api/news/${news_id}`
+    const res = await fetch(url);
+    const data = await res.json();
+    displayNewsDetails(data.data[0]);
+}
+const displayNewsDetails = singleNews => {
+    console.log(singleNews);
+    const modalTitle = document.getElementById('newsDetailModalLabel');
+    modalTitle.innerHTML = `
+    <h4>${singleNews.title ? singleNews.title : 'no news title found'}</h4>
+    <p>by: ${singleNews.author.name ? singleNews.author.name : 'no author name found'}</p>
+    <p>Published on: ${singleNews.author.published_date ? singleNews.author.published_date : 'no published date found'}</p>
+    `;
+    const newsDetails = document.getElementById('news-details');
+    newsDetails.innerHTML = `
+    <img src="${singleNews.image_url}" class="img-fluid">
+    <div class="d-flex d-grid gap-2"> 
+    <p>Rating: ${singleNews.rating.number ? singleNews.rating.number : 'no ratings found'} </p>
+    <p>Viewed by: ${singleNews.total_view ? singleNews.total_view : 'no view details found'} </p></div>
+    <p>${singleNews.details}</p>
+    `   ;
+}
+
+const toggleSpinner = isLoading => {
+    const loaderSection = document.getElementById('loader');
+    if (isLoading) {
+        loaderSection.classList.remove('d-none');
+    }
+    else {
+        loaderSection.classList.add('d-none');
+    }
+}
+
 // const showAll = document.getElementById('show-all');
 // if (dataLimit && phones.length > 10) {
 //     phones = phones.slice(0, 10);
@@ -91,5 +141,11 @@ const displayNews = news => {
 // else {
 //     showAll.classList.add('d-none');
 //}
+
+
+//<div class="col"><i onclick="loadNewsDetails('${singleNews._id}')" class="fa-solid fa-arrow-right"></i></div>
+//  <div class="col" style="width:20px;">${singleNews.author.img}</div>
+
+//<p>${singleNews.total_view ? singleNews.total_view : 'view number not found'}</p>
 
 //loadNews();
