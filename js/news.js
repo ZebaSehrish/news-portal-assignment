@@ -76,8 +76,8 @@ const displayNews = news => {
                     </div>
                     <div class="col-md-8 col-12 col-sm-6">
                         <div onclick="loadNewsDetails('${singleNews._id}')"  class="card-body" data-bs-toggle="modal" data-bs-target="#newsDetailModal">
-                            <h5 class="card-title pt-4">${singleNews.title} ? singleNews.title : 'no title found'}"</h5>
-                            <p class="card-text">${singleNews.details}? singleNews.details : 'no details found'}"<span>...</span></p>
+                            <h5 class="card-title pt-4">${singleNews.title ? singleNews.title : 'no title found'}"</h5>
+                            <p class="card-text">${singleNews.details ? singleNews.details : 'no details found'}"<span>...</span></p>
                             <div id="show-all" class="text-center d-none">
                 <div id="btn-show-all" class="btn btn-primary">Show all</div> </div>
 
@@ -102,12 +102,13 @@ const displayNews = news => {
             `;
         newsContainer.appendChild(newsDiv);
     })
-    //stop the spinner
-    toggleSpinner(false);
 
 }
 
 loadNews('01');
+//stop the spinner
+
+toggleSpinner(false);
 
 //show news details
 const loadNewsDetails = async (news_id) => {
