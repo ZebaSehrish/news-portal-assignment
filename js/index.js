@@ -6,14 +6,13 @@ const loadCategory = async () => {
 }
 
 displayCategory = news => {
-    //console.log(news);
     const categoryContainer = document.getElementById('category-container');
     categoryContainer.innerHTML = ``;
     const categoryDiv = document.createElement('div');
     categoryDiv.classList.add('row');
     categoryDiv.innerHTML =
         `   <button class="col border border-0 bg-transparent">Home</button>
-            <button onclick="loadNews('${news[0].category_id}')" class="col border border-0 bg-transparent">${news[0].category_name}</button>
+            <button id="btn" onclick="loadNews('${news[0].category_id}')" class="col border border-0 bg-transparent">${news[0].category_name}</button>
             <button  onclick="loadNews('${news[1].category_id}')" class="col border border-0 bg-transparent">${news[1].category_name}</button>
             <button  onclick="loadNews('${news[2].category_id}')" class="col border border-0 bg-transparent">${news[2].category_name}</button>
             <button  onclick="loadNews('${news[3].category_id}')" class="col border border-0 bg-transparent">${news[3].category_name}</button>
@@ -37,8 +36,6 @@ const loadNews = async (category_id) => {
 }
 
 const displayNews = news => {
-    // console.log(news);
-
     const newsContainer = document.getElementById('news-container');
     newsContainer.innerHTML = ` `;
 
@@ -51,23 +48,26 @@ const displayNews = news => {
         noNews.classList.add('d-none');
     }
 
-    //display all news
-    news.forEach(singleNews => {
 
+    news.forEach(singleNews => {
+        if (singleNews.details.length > 500) {
+            singleNews.details = singleNews.details.slice(0, 400);
+        }
+        //display all news
         const newsDiv = document.createElement('div');
         newsDiv.innerHTML = `
-            <div class="d-flex justify-content-center align-items-center pt-2 mb-2">
+            <div class="d-flex justify-content-center align-items-center pt-5 mb-2">
             <div class="container-fluid card mb-3 card-portion" style=" width: 1080px;
             height: 350px;">
-                <div class="row g-0 ">
+                <div class="row g-0">
                     <div class="col-md-4">
-                        <img src="${singleNews.image_url}" class="img-fluid mt-3 ms-3" style="width: 350px;
+                        <img src="${singleNews.image_url}" class="img-fluid mt-3 ms-2" style="width: 350px;
                         height: 300px;" alt="...">
                     </div>
                     <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">title</h5>
-                            <p class="card-text">${singleNews.details}</p>
+                        <div onclick="loadNewsDetails('${singleNews._id}')"  class="card-body" data-bs-toggle="modal" data-bs-target="#newsDetailModal">
+                            <h5 class="card-title pt-4">${singleNews.title}</h5>
+                            <p class="card-text">${singleNews.details}<span>...</span></p>
                             <div id="show-all" class="text-center d-none">
                 <div id="btn-show-all" class="btn btn-primary">Show all</div> </div>
 
@@ -75,7 +75,7 @@ const displayNews = news => {
                            <div class="col d-flex d-grid gap-3"><div><img style="width:40px;height:40px; border-radius: 155px;" src="${singleNews.author.img ? singleNews.author.img : 'none'}"></div>
                                 <div>${singleNews.author.name ? singleNews.author.name : 'author name not found'}</div></div>
 
-                                <div class="col d-flex d-grid gap-2"><div><i class="fa-regular fa-eye"></i></div>
+                                <div class="col d-flex d-grid gap-2"><div><i onclick="loadNewsDetails('${singleNews._id}')" class="fa-regular fa-eye"></i></div>
                                 <p>${singleNews.total_view ? singleNews.total_view : 'view number not found'}</p>
                                 </div>
 
@@ -96,6 +96,7 @@ const displayNews = news => {
     toggleSpinner(false);
 
 }
+
 loadNews('01');
 
 //show news details
@@ -133,19 +134,5 @@ const toggleSpinner = isLoading => {
     }
 }
 
-// const showAll = document.getElementById('show-all');
-// if (dataLimit && phones.length > 10) {
-//     phones = phones.slice(0, 10);
-//     showAll.classList.remove('d-none');
-// }
-// else {
-//     showAll.classList.add('d-none');
-//}
-
-
-//<div class="col"><i onclick="loadNewsDetails('${singleNews._id}')" class="fa-solid fa-arrow-right"></i></div>
-//  <div class="col" style="width:20px;">${singleNews.author.img}</div>
-
-//<p>${singleNews.total_view ? singleNews.total_view : 'view number not found'}</p>
 
 //loadNews();
