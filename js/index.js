@@ -1,8 +1,14 @@
 const loadCategory = async () => {
     const url = `https://openapi.programming-hero.com/api/news/categories`;
-    const res = await fetch(url);
-    const data = await res.json();
-    displayCategory(data.data.news_category);
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        displayCategory(data.data.news_category);
+    }
+    catch (error) {
+        console.log(error);
+    }
+
 }
 
 displayCategory = news => {
@@ -30,9 +36,14 @@ loadCategory();
 
 const loadNews = async (category_id) => {
     const url = `https://openapi.programming-hero.com/api/news/category/${category_id}`
-    const res = await fetch(url)
-    const data = await res.json()
-    displayNews(data.data);
+    try {
+        const res = await fetch(url)
+        const data = await res.json()
+        displayNews(data.data);
+    }
+    catch (error) {
+        console.log(error);
+    }
 }
 
 const displayNews = news => {
@@ -48,7 +59,6 @@ const displayNews = news => {
         noNews.classList.add('d-none');
     }
 
-
     news.forEach(singleNews => {
         if (singleNews.details.length > 500) {
             singleNews.details = singleNews.details.slice(0, 400);
@@ -61,7 +71,7 @@ const displayNews = news => {
             height: 350px;">
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <img src="${singleNews.image_url}" class="img-fluid mt-3 ms-2" style="width: 350px;
+                        <img src="${singleNews.image_url}" class="img-fluid mt-3 ms-1" style="width: 350px;
                         height: 300px;" alt="...">
                     </div>
                     <div class="col-md-8">
@@ -102,12 +112,17 @@ loadNews('01');
 //show news details
 const loadNewsDetails = async (news_id) => {
     const url = `https://openapi.programming-hero.com/api/news/${news_id}`
-    const res = await fetch(url);
-    const data = await res.json();
-    displayNewsDetails(data.data[0]);
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        displayNewsDetails(data.data[0]);
+    }
+    catch (error) {
+        console.log(error);
+    }
 }
 const displayNewsDetails = singleNews => {
-    console.log(singleNews);
+    //console.log(singleNews);
     const modalTitle = document.getElementById('newsDetailModalLabel');
     modalTitle.innerHTML = `
     <h4>${singleNews.title ? singleNews.title : 'no news title found'}</h4>
