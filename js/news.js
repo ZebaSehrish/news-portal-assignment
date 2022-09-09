@@ -102,13 +102,14 @@ const displayNews = news => {
             `;
         newsContainer.appendChild(newsDiv);
     })
+    //stop the spinner
+
+    toggleSpinner(false);
+
 
 }
 
 loadNews('01');
-//stop the spinner
-
-toggleSpinner(false);
 
 //show news details
 const loadNewsDetails = async (news_id) => {
